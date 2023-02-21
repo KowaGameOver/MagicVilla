@@ -62,9 +62,8 @@ namespace MagicVilla_VillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<VillaCreateDTO>> CreateVillaAsync([FromBody] VillaCreateDTO villaCreateDTO)
         {
-            if (await _dbVilla.GetAsync(x => x.Name.ToLower() == villaCreateDTO.Name.ToLower()) != null)
+            if (_dbVilla.FindByNameAsync(villaCreateDTO) == true)
             {
-                _logger.Log("Villa already Exist!", "error");
                 return BadRequest();
             }
             if (villaCreateDTO == null)
