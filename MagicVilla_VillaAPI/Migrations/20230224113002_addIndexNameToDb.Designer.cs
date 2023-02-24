@@ -4,6 +4,7 @@ using MagicVilla_VillaAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MagicVilla_VillaAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230224113002_addIndexNameToDb")]
+    partial class addIndexNameToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,11 +26,11 @@ namespace MagicVilla_VillaAPI.Migrations
 
             modelBuilder.Entity("MagicVilla_VillaAPI.Models.Villa", b =>
                 {
-                    b.Property<int>("VillaId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VillaId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Amenity")
                         .IsRequired()
@@ -61,17 +63,31 @@ namespace MagicVilla_VillaAPI.Migrations
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("VillaId");
+                    b.HasKey("Id");
 
-                    b.HasIndex(new[] { "Name" }, "Index_Name")
-                        .IsUnique();
+                    b.HasIndex(new[] { "Name" }, "Index_Name");
 
                     b.ToTable("Villas");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Amenity = "",
+                            CreatedDate = new DateTime(2023, 2, 24, 13, 30, 2, 67, DateTimeKind.Local).AddTicks(6516),
+                            Details = "Ocean View by Exceptional Villas is a lovely 3 bedroom villa set on 2 levels and located on the prestigious Royal Westmoreland Golf Club. Guests staying at here have panoramic view of the Caribbean Sea while overlooking a beautiful pond and fountain which is home to local birds. This is a very well designed villa and has a homely feel to it. It can be comfortably rented as a one, two or three bedroom and has a communal swimming pool and golf access payable locally.",
+                            ImageUrl = "",
+                            Name = "Royal Villa",
+                            Occupancy = 5,
+                            Rate = 200.0,
+                            Sqft = 550,
+                            UpdatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("MagicVilla_VillaAPI.Models.VillaNumber", b =>
                 {
-                    b.Property<int>("VillaNumberId")
+                    b.Property<int>("VillaNo")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
@@ -87,7 +103,7 @@ namespace MagicVilla_VillaAPI.Migrations
                     b.Property<int>("VillaID")
                         .HasColumnType("int");
 
-                    b.HasKey("VillaNumberId");
+                    b.HasKey("VillaNo");
 
                     b.HasIndex("VillaID");
 

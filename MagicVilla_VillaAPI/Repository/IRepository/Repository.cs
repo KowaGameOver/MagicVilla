@@ -56,11 +56,5 @@ namespace MagicVilla_VillaAPI.Repository.IRepository
             await _db.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(T entity)
-        {
-            _dbSet.Update(entity);
-            await SaveAsync();
-        }
-
     }
 }
