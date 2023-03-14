@@ -1,6 +1,8 @@
 using MagicVilla_VillaAPI;
 using MagicVilla_VillaAPI.Data;
+using MagicVilla_VillaAPI.ExceptionFiltering;
 using MagicVilla_VillaAPI.Logging;
+using MagicVilla_VillaAPI.Middleware;
 using MagicVilla_VillaAPI.Repository.IRepository;
 using MagicVilla_VillaAPI.ServiceLayer.IService;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +30,7 @@ builder.Services.AddControllers()
 builder.Services.AddSingleton<ILogging, LoggingV2>();
 
 var app = builder.Build();
+app.UseMiddleware<ExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

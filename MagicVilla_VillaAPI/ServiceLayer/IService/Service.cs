@@ -14,10 +14,6 @@ namespace MagicVilla_VillaAPI.ServiceLayer.IService
         public Task<List<T>> OkGetAllAsyncResponse(IRepository<T> repository, IMapper mapper)
         {
             var entitys = repository.GetAllAsync();
-            if (entitys == null)
-            {
-                throw new Exception();
-            }
             var responseDTO = mapper.Map<Task<List<T>>>(entitys);
             return responseDTO;
         }

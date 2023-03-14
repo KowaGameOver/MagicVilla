@@ -1,12 +1,7 @@
 ﻿using AutoMapper;
-using MagicVilla_VillaAPI.Logging;
 using MagicVilla_VillaAPI.Models.Dto;
-using MagicVilla_VillaAPI.Models;
 using MagicVilla_VillaAPI.Repository.IRepository;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 using MagicVilla_VillaAPI.ServiceLayer.IService;
 
 namespace MagicVilla_VillaAPI.Controllers
@@ -46,10 +41,10 @@ namespace MagicVilla_VillaAPI.Controllers
             return Ok(await _serviceForVillaNumber.OkCreateVillaNumberAsyncResponse(createDTO, _villaNumberRepository,_villaRepository,_mapper));
         }
 
-        [HttpDelete("DeleteVillaNumberByVillaNumber/{VillaNo:int}", Name = "DeleteVillaNumberByVillaNumber")]
-        public async Task<ActionResult<VillaNumberDTO>> DeleteVillaNumberAsync(int VillaNo)
+        [HttpDelete("DeleteVillaNumberByVillaNumberAndVillaId/{VillaNo:int}", Name = "DeleteVillaNumberByVillaNumberAndVillaId")]
+        public async Task<ActionResult<VillaNumberDTO>> DeleteVillaNumberAsync(int VillaNo,int VillaId)
         {
-            return Ok(await _serviceForVillaNumber.OkDeleteVillaNumberAsyncResponse(VillaNo, _villaNumberRepository));
+            return Ok(await _serviceForVillaNumber.OkDeleteVillaNumberAsyncResponse(VillaNo,VillaId, _villaNumberRepository));
         }
 
         [HttpPut("UpdateVillaNumberByVillaNumber/{VillaNo:int}", Name = "UpdateVillaNumberByVillaNumber")]

@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
+using MagicVilla_VillaAPI.Errors;
+using MagicVilla_VillaAPI.ExceptionFiltering;
 using MagicVilla_VillaAPI.Models;
 using MagicVilla_VillaAPI.Models.Dto;
 using MagicVilla_VillaAPI.Repository.IRepository;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Server.IIS.Core;
-using System.Net;
 
 namespace MagicVilla_VillaAPI.ServiceLayer.IService
 {
@@ -14,7 +13,7 @@ namespace MagicVilla_VillaAPI.ServiceLayer.IService
         {
             if (createDTO == null)
             {
-                throw new Exception();
+                throw new NullEntityException();
             }
             var created_villa = mapper.Map<Villa>(createDTO);
             await villaRepository.CreateAsync(created_villa);
@@ -25,12 +24,12 @@ namespace MagicVilla_VillaAPI.ServiceLayer.IService
         {
             if (id == 0)
             {
-                throw new Exception();
+                throw new BadIdException();
             }
             var entity = await villaRepository.GetAsync(e => e.Id == id);
             if (entity == null)
             {
-                throw new Exception();
+                throw new NullEntityException();
             }
             await villaRepository.RemoveAsync(entity);
             return null;
@@ -40,30 +39,22 @@ namespace MagicVilla_VillaAPI.ServiceLayer.IService
         {
             if (id == 0)
             {
-                throw new Exception();
+                throw new BadIdException();
             }
             var entity = await villaRepository.GetAsync(v => v.Id == id);
-            if (entity == null)
-            {
-                throw new Exception();
-            }
             var getDTO = mapper.Map<VillaDTO>(entity);
             return getDTO;
         }
 
         public async Task<VillaUpdateDTO> OkUpdateVillaAsyncResponse(int id, IVillaRepository villaRepository, IMapper mapper, VillaUpdateDTO updateDTO)
         {
-            if (id == 0)
+            if (id == 0 || updateDTO.Id != id)
             {
-                throw new Exception();
+                throw new BadIdException();
             }
             if (updateDTO == null)
             {
-                throw new Exception();
-            }
-            if (id != updateDTO.Id)
-            {
-                throw new Exception();
+                throw new NullEntityException();
             }
             var updateVilla = mapper.Map<Villa>(updateDTO);
             await villaRepository.UpdateAsync(updateVilla);

@@ -1,18 +1,13 @@
 ﻿using AutoMapper;
-using MagicVilla_VillaAPI.Data;
-using MagicVilla_VillaAPI.Logging;
-using MagicVilla_VillaAPI.Models;
+using MagicVilla_VillaAPI.ExceptionFiltering;
 using MagicVilla_VillaAPI.Models.Dto;
 using MagicVilla_VillaAPI.Repository.IRepository;
 using MagicVilla_VillaAPI.ServiceLayer.IService;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Net;
 
 namespace MagicVilla_VillaAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class VillaAPIController : ControllerBase
     {

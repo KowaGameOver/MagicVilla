@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using MagicVilla_VillaAPI.Errors;
+using MagicVilla_VillaAPI.ExceptionFiltering;
 using MagicVilla_VillaAPI.Models;
 using MagicVilla_VillaAPI.Models.Dto;
 using MagicVilla_VillaAPI.Repository.IRepository;
@@ -11,31 +13,35 @@ namespace MagicVilla_VillaAPI.ServiceLayer.IService
         {
             if (createDTO == null)
             {
-                throw new Exception();
+                throw new NullEntityException();
             }
-            if (await villaRepository.GetAsync(x => x.Id == createDTO.VillaID) == null)
+            if (await villaRepository.GetAsync(v => v.Id == createDTO.VillaID) == null)
             {
-                throw new Exception();
+                throw new NullEntityException();
             }
-            if (await villaNumberRepository.GetAsync(x => x.VillaNo == createDTO.VillaNo && x.VillaID == createDTO.VillaID) != null)
+            if (await villaNumberRepository.GetAsync(vn => vn.VillaNo == createDTO.VillaNo && vn.VillaID == createDTO.VillaID) != null)
             {
-                throw new Exception();
+                throw new EntityAlreadyExistException();
             }
             var villaNumber = mapper.Map<VillaNumber>(createDTO);
             await villaNumberRepository.CreateAsync(villaNumber);
             return createDTO;
         }
 
-        public async Task<VillaNumberDTO> OkDeleteVillaNumberAsyncResponse(int VillaNo, IVillaNumberRepository villaNumberRepository)
+        public async Task<VillaNumberDTO> OkDeleteVillaNumberAsyncResponse(int VillaNo,int VillaID, IVillaNumberRepository villaNumberRepository)
         {
             if (VillaNo == 0)
             {
-                throw new Exception();
+                throw new BadIdException();
             }
-            var villaNumber = await villaNumberRepository.GetAsync(v => v.VillaNo == VillaNo);
+            if (VillaID == 0)
+            {
+                throw new BadIdException();
+            }
+            var villaNumber = await villaNumberRepository.GetAsync(vn => vn.VillaNo == VillaNo && vn.VillaID == VillaID);
             if (villaNumber == null)
             {
-                throw new Exception();
+                throw new NullEntityException();
             }
             await villaNumberRepository.RemoveAsync(villaNumber);
             return null;
@@ -45,12 +51,12 @@ namespace MagicVilla_VillaAPI.ServiceLayer.IService
         {
             if (VillaID == 0)
             {
-                throw new Exception();
+                throw new BadIdException();
             }
-            var entity = await villaNumberRepository.GetAsync(v => v.VillaID == VillaID);
+            var entity = await villaNumberRepository.GetAsync(vn => vn.VillaID == VillaID);
             if (entity == null)
             {
-                throw new Exception();
+                throw new NullEntityException();
             }
             var getDTO = mapper.Map<VillaNumberDTO>(entity);
             return getDTO;
@@ -60,15 +66,15 @@ namespace MagicVilla_VillaAPI.ServiceLayer.IService
         {
             if (VillaNo == 0 || updateDTO.VillaNo != VillaNo)
             {
-                throw new Exception();
+                throw new BadIdException();
             }
             if (updateDTO == null)
             {
-                throw new Exception();
+                throw new NullEntityException();
             }
             if (await villaRepository.GetAsync(v => v.Id == updateDTO.VillaID) == null)
             {
-                throw new Exception();
+                throw new NullEntityException();
             }
             var villaNumber = mapper.Map<VillaNumber>(updateDTO);
             await villaNumberRepository.UpdateAsync(villaNumber);
