@@ -9,7 +9,6 @@ namespace MagicVilla_VillaAPI
         public MappingConfig()
         {
             CreateMap<Villa, VillaDTO>();
-            //CreateMap<VillaDTO, Villa>();
             CreateMap<Villa, VillaUpdateDTO>();
             CreateMap<VillaCreateDTO, Villa>();
             CreateMap<VillaUpdateDTO, Villa>();
@@ -18,6 +17,11 @@ namespace MagicVilla_VillaAPI
             CreateMap<VillaNumberCreateDTO,VillaNumber>();
             CreateMap<VillaNumberUpdateDTO,VillaNumber>();
             CreateMap<VillaNumber, VillaNumberUpdateDTO>();
+
+            CreateMap<Rent, RentCreateDTO>();
+            CreateMap<RentCreateDTO, Rent>();
+            CreateMap<Rent, RentDTO>();
+            //CreateMap<RentDTO, Rent>();
         }
     }
 }

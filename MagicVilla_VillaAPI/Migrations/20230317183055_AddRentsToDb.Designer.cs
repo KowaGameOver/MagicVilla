@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MagicVilla_VillaAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230224133848_RenameVillaID")]
-    partial class RenameVillaID
+    [Migration("20230317183055_AddRentsToDb")]
+    partial class AddRentsToDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,13 +24,48 @@ namespace MagicVilla_VillaAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("MagicVilla_VillaAPI.Models.Villa", b =>
+            modelBuilder.Entity("MagicVilla_VillaAPI.Models.Rent", b =>
                 {
-                    b.Property<int>("VillaId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VillaId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("DaysForRent")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UnicCode")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("VillaNum")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("dateOfRegistry")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VillaNum");
+
+                    b.ToTable("Rents");
+                });
+
+            modelBuilder.Entity("MagicVilla_VillaAPI.Models.Villa", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Amenity")
                         .IsRequired()
@@ -63,7 +98,7 @@ namespace MagicVilla_VillaAPI.Migrations
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("VillaId");
+                    b.HasKey("Id");
 
                     b.HasIndex(new[] { "Name" }, "Index_Name")
                         .IsUnique();
@@ -73,7 +108,7 @@ namespace MagicVilla_VillaAPI.Migrations
 
             modelBuilder.Entity("MagicVilla_VillaAPI.Models.VillaNumber", b =>
                 {
-                    b.Property<int>("VillaNumberId")
+                    b.Property<int>("VillaNo")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
@@ -89,11 +124,22 @@ namespace MagicVilla_VillaAPI.Migrations
                     b.Property<int>("VillaID")
                         .HasColumnType("int");
 
-                    b.HasKey("VillaNumberId");
+                    b.HasKey("VillaNo");
 
                     b.HasIndex("VillaID");
 
                     b.ToTable("VillaNumbers");
+                });
+
+            modelBuilder.Entity("MagicVilla_VillaAPI.Models.Rent", b =>
+                {
+                    b.HasOne("MagicVilla_VillaAPI.Models.VillaNumber", "villaNumber")
+                        .WithMany()
+                        .HasForeignKey("VillaNum")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("villaNumber");
                 });
 
             modelBuilder.Entity("MagicVilla_VillaAPI.Models.VillaNumber", b =>
